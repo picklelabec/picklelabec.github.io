@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PickleLab — Manual Digital Post-Clínica</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Helvetica+Neue:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --lime: #C8F000;
+    --navy: #0A0F2C;
+    --slate: #1C2340;
+    --slate2: #252C4A;
+    --white: #FFFFFF;
+    --muted: rgba(255,255,255,0.55);
+    --card-bg: rgba(255,255,255,0.05);
+    --card-border: rgba(255,255,255,0.1);
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--navy);
+    color: var(--white);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, .logo {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,15,44,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 58px;
+  }
+
+  .logo {
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .logo span { color: var(--lime); }
+
+  .nav-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 4px;
+  }
+
+  .nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--white);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  .nav-menu {
+    display: none;
+    position: absolute;
+    top: 58px;
+    left: 0;
+    right: 0;
+    background: var(--slate);
+    border-bottom: 1px solid var(--card-border);
+    padding: 12px 0;
+    flex-direction: column;
+  }
+
+  .nav-menu.open { display: flex; }
+
+  .nav-menu a {
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 12px 24px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-menu a:hover { color: var(--lime); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 60px 24px 52px;
+    text-align: center;
+    background: linear-gradient(180deg, #0D1333 0%, var(--navy) 100%);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,240,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    background: var(--lime);
+    color: var(--navy);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 .accent { color: var(--lime); }
+
+  .hero .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  .hero-quote {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-left: 4px solid var(--lime);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    text-align: left;
+    margin-bottom: 32px;
+  }
+
+  .hero-quote p {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  .hero-quote .attr {
+    font-size: 12px;
+    color: var(--lime);
+    font-weight: 600;
+    font-style: normal;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── SECTION ─── */
+  section {
+    padding: 56px 24px;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  section:nth-child(even) { background: var(--slate); }
+
+  .section-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,240,0,0.12);
+    border: 1px solid rgba(200,240,0,0.3);
+    color: var(--lime);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+  }
+
+  .section-tag .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lime);
+  }
+
+  .section-title {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .section-intro {
+    font-size: 15px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    line-height: 1.75;
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(200,240,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .card p, .card li {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.7;
+  }
+
+  .card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .card ul li::before {
+    content: '→';
+    color: var(--lime);
+    margin-right: 8px;
+    font-weight: 700;
+  }
+
+  /* ─── TIP ─── */
+  .tip {
+    background: rgba(200,240,0,0.07);
+    border: 1px solid rgba(200,240,0,0.25);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin: 20px 0;
+  }
+
+  .tip-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--lime);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .tip p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .tip strong { color: var(--lime); }
+
+  /* ─── RULE BOX ─── */
+  .rule-box {
+    background: var(--lime);
+    color: var(--navy);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .rule-box h3 {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .rule-box p {
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0.75;
+  }
+
+  /* ─── ACCORDION ─── */
+  .accordion {
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+
+  .accordion-header {
+    width: 100%;
+    background: var(--card-bg);
+    border: none;
+    cursor: pointer;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+
+  .accordion-header:hover { background: rgba(255,255,255,0.07); }
+
+  .accordion-header .chevron {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--lime);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s;
+    font-size: 10px;
+    color: var(--lime);
+  }
+
+  .accordion-header.open .chevron { transform: rotate(180deg); }
+
+  .accordion-body {
+    display: none;
+    padding: 0 20px 18px;
+    background: var(--card-bg);
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.75;
+  }
+
+  .accordion-body.open { display: block; }
+
+  .accordion-body ul {
+    list-style: none;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .accordion-body ul li::before {
+    content: '→';
+    color: var(--lime);
+    margin-right: 8px;
+    font-weight: 700;
+  }
+
+  /* ─── SEMAPHORE ─── */
+  .semaphore {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .semaphore-zone {
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .semaphore-zone.green { background: rgba(100,200,80,0.15); border: 1px solid rgba(100,200,80,0.35); }
+  .semaphore-zone.yellow { background: rgba(250,200,50,0.12); border: 1px solid rgba(250,200,50,0.35); }
+  .semaphore-zone.red { background: rgba(240,60,60,0.12); border: 1px solid rgba(240,60,60,0.35); }
+
+  .zone-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .green .zone-dot { background: #5DC950; }
+  .yellow .zone-dot { background: #F5C832; }
+  .red .zone-dot { background: #F04040; }
+
+  .zone-info strong {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .zone-info span { font-size: 12px; color: var(--muted); }
+
+  .zone-badge {
+    margin-left: auto;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+
+  .green .zone-badge { color: #5DC950; }
+  .yellow .zone-badge { color: #F5C832; }
+  .red .zone-badge { color: #F04040; }
+
+  /* ─── MODULE NAV ─── */
+  .module-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 28px 0;
+  }
+
+  .module-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 16px 14px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .module-card:hover {
+    border-color: rgba(200,240,0,0.4);
+    background: rgba(200,240,0,0.05);
+  }
+
+  .module-card .m-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--lime);
+    text-transform: uppercase;
+  }
+
+  .module-card .m-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.3;
+  }
+
+  /* ─── POSITION DIAGRAM ─── */
+  .position-visual {
+    background: var(--slate2);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .player-figure {
+    margin: 0 auto 16px;
+    width: 80px;
+    height: 80px;
+    position: relative;
+  }
+
+  .player-figure svg { width: 80px; height: 80px; }
+
+  .position-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    text-align: left;
+  }
+
+  .pos-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .pos-bullet {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lime);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: var(--card-border);
+    margin: 24px 0;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 40px 24px 60px;
+    text-align: center;
+    background: var(--slate);
+    border-top: 1px solid var(--card-border);
+  }
+
+  footer .logo { font-size: 22px; display: block; margin-bottom: 10px; }
+
+  footer p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  footer .coach {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin: 16px 0;
+  }
+
+  .coach .badge {
+    background: var(--lime);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+
+  /* ─── BACK-TO-TOP ─── */
+  .back-top {
+    position: fixed;
+    bottom: 24px;
+    right: 20px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--lime);
+    color: var(--navy);
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 900;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(200,240,0,0.35);
+    z-index: 99;
+    transition: transform 0.2s;
+  }
+
+  .back-top:hover { transform: scale(1.08); }
+  .back-top.visible { display: flex; }
+
+  /* ─── STRONG HIGHLIGHTS ─── */
+  strong.lime { color: var(--lime); }
+
+  @media (min-width: 640px) {
+    .hero h1 { font-size: 44px; }
+    .section-title { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="top">
+  <a href="#top" class="logo">Pickle<span>Lab</span></a>
+  <button class="nav-toggle" onclick="toggleMenu()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-menu" id="navMenu">
+    <a href="#home" onclick="closeMenu()">Inicio</a>
+    <a href="#ready" onclick="closeMenu()">Ready Position</a>
+    <a href="#modulo1" onclick="closeMenu()">Módulo 1 — Dinking</a>
+    <a href="#modulo2" onclick="closeMenu()">Módulo 2 — Bangers</a>
+    <a href="#modulo3" onclick="closeMenu()">Módulo 3 — Transición</a>
+    <a href="#modulo4" onclick="closeMenu()">Módulo 4 — Saque</a>
+  </div>
+</nav>
+
+<!-- HERO / HOME -->
+<section id="home" style="padding: 0; border-bottom: none;">
+  <div class="hero">
+    <div class="hero-eyebrow">Manual Post-Clínica · PickleLab</div>
+    <h1>Bienvenido al<br><span class="accent">siguiente nivel.</span></h1>
+    <p class="subtitle">Todo lo que trabajamos en la clínica, ahora en tu bolsillo. Léelo antes de entrar a la cancha.</p>
+
+    <div class="hero-quote">
+      <p>"El Pickleball es un juego de errores, no de ganadores."</p>
+      <p class="attr">— La paciencia dicta el punto · Mentalidad PickleLab</p>
+    </div>
+
+    <p style="font-size:14px; color:var(--muted); line-height:1.75; text-align:left;">
+      Gracias por ser parte de esta primera edición de la Clínica Intensiva PickleLab. Lo que aprendiste estos días no es teoría: es <strong class="lime">un sistema de juego</strong> diseñado para que tomes mejores decisiones, punto a punto, en cualquier nivel de juego.<br><br>
+      Usa este manual como tu guía de consulta rápida. Cada módulo es corto, directo y listo para aplicar.
+    </p>
+
+    <!-- Module navigation grid -->
+    <div class="module-grid">
+      <a href="#ready" class="module-card">
+        <span class="m-num">Base</span>
+        <span class="m-title">Ready Position & Fundamentos</span>
+      </a>
+      <a href="#modulo1" class="module-card">
+        <span class="m-num">Módulo 1</span>
+        <span class="m-title">Control de la Cocina</span>
+      </a>
+      <a href="#modulo2" class="module-card">
+        <span class="m-num">Módulo 2</span>
+        <span class="m-title">Manos Rápidas</span>
+      </a>
+      <a href="#modulo3" class="module-card">
+        <span class="m-num">Módulo 3</span>
+        <span class="m-title">Zona de Transición</span>
+      </a>
+    </div>
+    <a href="#modulo4" class="module-card" style="text-align:left; margin-top: -4px;">
+      <span class="m-num">Módulo 4</span>
+      <span class="m-title">Saques de Precisión y Devolución</span>
+    </a>
+  </div>
+</section>
+
+<!-- READY POSITION & FUNDAMENTOS -->
+<section id="ready">
+  <div class="section-tag"><span class="dot"></span> Fundamentos</div>
+  <h2 class="section-title">La Ready Position</h2>
+  <p class="section-intro">Todo en Pickleball parte de aquí. Sin una posición de espera correcta, el resto no funciona.</p>
+
+  <div class="position-visual">
+    <div class="player-figure">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- head -->
+        <circle cx="40" cy="14" r="9" fill="rgba(200,240,0,0.25)" stroke="#C8F000" stroke-width="1.5"/>
+        <!-- body -->
+        <line x1="40" y1="23" x2="40" y2="48" stroke="#C8F000" stroke-width="2" stroke-linecap="round"/>
+        <!-- arms spread -->
+        <line x1="20" y1="32" x2="60" y2="32" stroke="#C8F000" stroke-width="2" stroke-linecap="round"/>
+        <!-- paddle (right hand) -->
+        <rect x="60" y="26" width="12" height="14" rx="3" fill="#C8F000" opacity="0.7"/>
+        <!-- legs bent -->
+        <line x1="40" y1="48" x2="26" y2="68" stroke="#C8F000" stroke-width="2" stroke-linecap="round"/>
+        <line x1="40" y1="48" x2="54" y2="68" stroke="#C8F000" stroke-width="2" stroke-linecap="round"/>
+        <!-- feet dots -->
+        <circle cx="26" cy="70" r="3" fill="#C8F000" opacity="0.5"/>
+        <circle cx="54" cy="70" r="3" fill="#C8F000" opacity="0.5"/>
+      </svg>
+    </div>
+    <div class="position-labels">
+      <div class="pos-item"><div class="pos-bullet"></div><span><strong>Puntas de los pies</strong> — cuerpo activo, listo para moverse en cualquier dirección.</span></div>
+      <div class="pos-item"><div class="pos-bullet"></div><span><strong>Hombros adelantados</strong> — ligera inclinación hacia la red.</span></div>
+      <div class="pos-item"><div class="pos-bullet"></div><span><strong>Paleta al frente</strong> — al nivel del ombligo/cadera, visible y lista.</span></div>
+      <div class="pos-item"><div class="pos-bullet"></div><span><strong>Rodillas semiflexionadas</strong> — peso sobre la parte media-delantera del pie.</span></div>
+    </div>
+  </div>
+
+  <div class="rule-box">
+    <h3>Menos es más.</h3>
+    <p>Movimientos cortos · Impacto delante del cuerpo · Sin muñeca</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <div class="icon">✋</div>
+      El principio más importante
+    </div>
+    <p>Cada golpe en Pickleball debe ser <strong class="lime">compacto y controlado</strong>. El impacto ocurre siempre delante del cuerpo, a la altura del ombligo o la cadera. La muñeca es un enemigo: <strong>no la uses para generar potencia</strong>.</p>
+  </div>
+
+  <div class="tip">
+    <div class="tip-label">💡 Tip de Oro</div>
+    <p>Si tu swing parece el de tenis, es demasiado largo. <strong>Reduce el backswing a la mitad</strong> y tu control se duplicará.</p>
+  </div>
+</section>
+
+<!-- MÓDULO 1 -->
+<section id="modulo1">
+  <div class="section-tag"><span class="dot"></span> Módulo 1</div>
+  <h2 class="section-title">El Control de la Cocina</h2>
+  <p class="section-intro">El dink no es un golpe defensivo. Es <strong>tu arma principal</strong> para construir puntos con cabeza.</p>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      Dink de Derecha (Forehand Dink)
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>Posición neutra, paleta al frente. El movimiento sale <strong>del hombro y el codo</strong>, no de la muñeca. Contacta la bola <strong>delante del cuerpo</strong>, a la altura de la cadera, y dirige suavemente hacia la zona de la cocina del oponente.</p>
+      <ul>
+        <li>Contacto bajo → la bola cruza baja y controlada</li>
+        <li>Apunta al cuerpo o al pie del rival, no al espacio</li>
+        <li>Mantén la paleta firme, sin "flippear" al final</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      Dink de Revés (Backhand Dink)
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>El revés es donde la mayoría pierde la paciencia. <strong>Mantén la paleta al frente</strong> y usa el mismo principio: movimiento de hombro, sin muñeca. El revés tiene naturalmente más control porque el brazo viaja hacia adelante.</p>
+      <ul>
+        <li>Gira levemente el hombro hacia la bola</li>
+        <li>Impacto limpio a la altura del ombligo</li>
+        <li>No saques el codo hacia atrás — es mini swing</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      El Pivot Step — Defender sin ceder terreno
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>Cuando el oponente te saca de la línea de la cocina con un dink cruzado, <strong>no corras hacia atrás</strong>. Usa el <strong>Pivot Step</strong>: gira sobre tu pie de apoyo y abre el ángulo del cuerpo hacia donde va la bola.</p>
+      <ul>
+        <li>Pie pivote = el pie del mismo lado de la bola</li>
+        <li>Mantén la cabeza de la paleta arriba durante el pivot</li>
+        <li>Recupera la posición central inmediatamente después</li>
+      </ul>
+      <div style="height:12px;"></div>
+      <div class="tip" style="margin:0;">
+        <div class="tip-label">💡 Tip de Oro</div>
+        <p>El pivot te permite cubrir <strong>30% más cancha</strong> sin perder la posición en la red. Un paso, no una carrera.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-box" style="margin-top: 24px;">
+    <h3>Regla de los 4 Dinks</h3>
+    <p>Comprométete a hacer mínimo 4 dinks antes de buscar una bola para atacar. La paciencia gana puntos.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      <div class="icon">🎯</div>
+      ¿Qué busca el dink?
+    </div>
+    <ul>
+      <li>Forzar al rival a golpear <strong>hacia arriba</strong> (bola atacable)</li>
+      <li>Sacarlo de su posición en la cocina</li>
+      <li>Generar errores sin forzar tu propio ataque</li>
+    </ul>
+  </div>
+</section>
+
+<!-- MÓDULO 2 -->
+<section id="modulo2">
+  <div class="section-tag"><span class="dot"></span> Módulo 2</div>
+  <h2 class="section-title">Manos Rápidas y Bloqueos</h2>
+  <p class="section-intro">¿Tu rival pega duro y no para? No lo sigas. <strong>Neutralízalo.</strong></p>
+
+  <div class="card">
+    <div class="card-title">
+      <div class="icon">🧱</div>
+      La técnica de la "Pared de Concreto"
+    </div>
+    <p>Cuando un "banger" te ataca con una bola rápida al cuerpo o hacia la red, <strong>no contraataques con fuerza</strong>. Convierte tu paleta en una pared: firme, al frente, sin movimiento adicional.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3 style="font-family:'Montserrat',sans-serif; font-size:16px; font-weight:700; margin-bottom:16px;">Los 3 principios del bloqueo</h3>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      1. Agarre relajado (4 o 5 de 10)
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>Un agarre tenso devuelve la potencia de la bola —exactamente lo que el banger quiere. <strong>Relaja la mano</strong>: el grip debe ser firme para controlar, pero flexible para absorber el impacto. Imagina que sostienes un pájaro: no tan suave que vuele, no tan fuerte que lo aprietes.</p>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      2. Paleta firme al frente
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>La paleta no se mueve hacia la bola —la bola llega a la paleta. Mantén el ángulo de la cara de la raqueta levemente inclinado hacia abajo. Esto hace que la bola caiga <strong>muerta en la cocina</strong>, sin velocidad de salida.</p>
+      <ul>
+        <li>Cara de paleta ligeramente hacia el piso</li>
+        <li>Codo cerca del cuerpo</li>
+        <li>Sin backswing — zero movimiento hacia atrás</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      3. Absorber, no devolver
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>El objetivo del bloqueo no es ganar el punto, es <strong>resetear el rally</strong>. Deja la bola en la cocina del oponente, baja y sin velocidad, para que él tenga que levantar la siguiente.</p>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-label">💡 Tip de Oro</div>
+    <p>Si el banger te gana puntos, <strong>deja que el banger se autodestruya</strong>. Un jugador que pega duro siempre comete más errores no forzados. Tu trabajo es sobrevivir el ataque y resetear.</p>
+  </div>
+
+  <div class="rule-box">
+    <h3>Nunca compitas con la fuerza.</h3>
+    <p>La pared vence al bateador. Siempre.</p>
+  </div>
+</section>
+
+<!-- MÓDULO 3 -->
+<section id="modulo3">
+  <div class="section-tag"><span class="dot"></span> Módulo 3</div>
+  <h2 class="section-title">Zona de Transición</h2>
+  <p class="section-intro">La mitad de cancha es el lugar más peligroso. También es donde se ganan o pierden los puntos si sabes qué hacer.</p>
+
+  <div class="card">
+    <div class="card-title">
+      <div class="icon">⚠️</div>
+      "Tierra de Nadie" — La decisión más importante
+    </div>
+    <p>Cuando estás en la zona media, tu cerebro toma la decisión más crítica del rally: <strong>¿ataco o defiendo?</strong> La respuesta siempre depende de una sola cosa: la altura de la bola.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3 style="font-family:'Montserrat',sans-serif; font-size:16px; font-weight:700; margin-bottom:16px;">La regla de la cintura</h3>
+
+  <div class="card" style="border-color: rgba(200,240,0,0.4); background: rgba(200,240,0,0.06);">
+    <div class="card-title">
+      <div class="icon" style="background:rgba(200,240,0,0.3);">⬆️</div>
+      Bola por encima de la cintura → ATACAR
+    </div>
+    <ul>
+      <li>Golpea con intención: dirección, no fuerza</li>
+      <li>Busca los pies del rival o la esquina abierta</li>
+      <li>Sigue avanzando hacia la red después del ataque</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-color: rgba(100,150,255,0.4); background: rgba(100,150,255,0.05); margin-top: 10px;">
+    <div class="card-title">
+      <div class="icon" style="background:rgba(100,150,255,0.2);">⬇️</div>
+      Bola por debajo de la cintura → RESETEAR
+    </div>
+    <ul>
+      <li>No intentes atacar: estás en posición vulnerable</li>
+      <li>Ejecuta un <strong>Reset Volley</strong> a la cocina</li>
+      <li>Bola suave, sin potencia, que baje por debajo de la red del rival</li>
+    </ul>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      ¿Qué es un Reset Volley?
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>Es un volley defensivo ejecutado con la misma técnica de la "pared de concreto": paleta al frente, agarre suave, cara inclinada hacia abajo. La bola sube apenas lo suficiente para cruzar la red y cae en la cocina del rival.</p>
+      <ul>
+        <li>Movimiento mínimo — casi solo la muñeca-hombro</li>
+        <li>Ángulo de paleta = clave del destino</li>
+        <li>Después del reset: avanza inmediatamente a la red</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-label">💡 Tip de Oro</div>
+    <p>La zona de transición es temporal. Tu objetivo es cruzarla <strong>lo más rápido posible</strong> hacia la cocina. Cada reset volley es un paso que te acerca a la red.</p>
+  </div>
+</section>
+
+<!-- MÓDULO 4 -->
+<section id="modulo4">
+  <div class="section-tag"><span class="dot"></span> Módulo 4</div>
+  <h2 class="section-title">Saques y Devoluciones</h2>
+  <p class="section-intro">El saque y la devolución no son neutros. Son <strong>las primeras dos decisiones tácticas</strong> de cada rally.</p>
+
+  <div class="card">
+    <div class="card-title">
+      <div class="icon">📐</div>
+      Profundidad sobre fuerza
+    </div>
+    <p>Un saque profundo te da tiempo. Un saque corto le regala posición a tu rival. <strong>No golpees fuerte — golpea lejos.</strong> El objetivo es empujar al rival hacia el fondo de la cancha para que su devolución sea difícil.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3 style="font-family:'Montserrat',sans-serif; font-size:16px; font-weight:700; margin-bottom:14px;">El Sistema del Semáforo 🚦</h3>
+
+  <div class="semaphore">
+    <div class="semaphore-zone green">
+      <div class="zone-dot"></div>
+      <div class="zone-info">
+        <strong>Zona Verde — Fondo de cancha</strong>
+        <span>Saque profundo, bola cerca de la línea base</span>
+      </div>
+      <div class="zone-badge">+3</div>
+    </div>
+    <div class="semaphore-zone yellow">
+      <div class="zone-dot"></div>
+      <div class="zone-info">
+        <strong>Zona Amarilla — Mitad de cancha</strong>
+        <span>Saque que cae en la zona media</span>
+      </div>
+      <div class="zone-badge">+1</div>
+    </div>
+    <div class="semaphore-zone red">
+      <div class="zone-dot"></div>
+      <div class="zone-info">
+        <strong>Zona Roja — Saque corto</strong>
+        <span>Le das posición de red gratis al rival</span>
+      </div>
+      <div class="zone-badge">0</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <div class="tip-label">💡 Tip de Oro</div>
+    <p>En cada saque pregúntate: <strong>¿Zona Verde o Roja?</strong> Entrena para llegar al verde consistentemente. Eso solo cambia cómo empieza cada punto a tu favor.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <h3 style="font-family:'Montserrat',sans-serif; font-size:16px; font-weight:700; margin-bottom:14px;">Los dos hábitos del saque</h3>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      Después de sacar: quédate atrás
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>Después de sacar, <strong>no avances</strong>. Tu posición es el fondo de cancha. Espera la devolución, evalúa la bola y toma tu siguiente decisión desde ahí. El error más común es correr hacia la red demasiado pronto después del saque.</p>
+      <ul>
+        <li>Saca → posición defensiva en el fondo</li>
+        <li>Espera la tercera bola con calma</li>
+        <li>Avanza solo cuando puedas hacerlo sin prisa</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <button class="accordion-header" onclick="toggleAccordion(this)">
+      La devolución perfecta
+      <div class="chevron">▼</div>
+    </button>
+    <div class="accordion-body">
+      <p>La devolución del saque tiene dos partes inseparables: <strong>el golpe y el movimiento</strong>. Impacta la bola con impulso hacia adelante —trayendo el cuerpo hacia la red— y apenas impactas, <strong>corre a la cocina</strong>.</p>
+      <ul>
+        <li>Devuelve profundo (Zona Verde del semáforo)</li>
+        <li>El impulso de la devolución es el inicio del sprint a la red</li>
+        <li>Llega a la línea de la cocina antes de que el rival golpee de nuevo</li>
+      </ul>
+      <div style="height:12px;"></div>
+      <div class="tip" style="margin:0;">
+        <div class="tip-label">💡 Tip de Oro</div>
+        <p>En la devolución siempre tienes ventaja: el receptor llega a la cocina antes que el servidor. <strong>No desperdicies esa ventaja</strong> quedándote atrás.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-box" style="margin-top: 24px;">
+    <h3>Devuelve profundo. Corre a la red. Siempre.</h3>
+    <p>Sin excepción. Sin esperar. Ese es el hábito.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#top" class="logo">Pickle<span style="color:var(--lime)">Lab</span></a>
+
+  <div class="coach">
+    <span>José Aguilera Abad</span>
+    <span class="badge">4.5</span>
+  </div>
+
+  <p>Clínica Intensiva de Pickleball<br>Niveles Principiante e Intermedio · Guayaquil, Ecuador</p>
+
+  <div style="height: 20px;"></div>
+
+  <div class="card" style="text-align:left; border-color: rgba(200,240,0,0.2);">
+    <div class="card-title" style="margin-bottom:8px;">
+      <div class="icon">📝</div>
+      Recuerda siempre
+    </div>
+    <ul>
+      <li>La <strong>Ready Position</strong> es el punto de partida de todo</li>
+      <li><strong>Menos es más</strong> — movimientos cortos y controlados</li>
+      <li>La <strong>paciencia</strong> dicta el punto, no la fuerza</li>
+      <li>Llega a la <strong>cocina lo antes posible</strong></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 24px; font-size:12px; opacity:0.4;">© PickleLab · Todos los derechos reservados</p>
+</footer>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" onclick="scrollToTop()" aria-label="Volver arriba">↑</button>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('navMenu').classList.toggle('open');
+  }
+
+  function closeMenu() {
+    document.getElementById('navMenu').classList.remove('open');
+  }
+
+  function toggleAccordion(btn) {
+    const body = btn.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    document.querySelectorAll('.accordion-body.open').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.accordion-header.open').forEach(b => b.classList.remove('open'));
+    if (!isOpen) {
+      body.classList.add('open');
+      btn.classList.add('open');
+    }
+  }
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('backTop');
+    if (window.scrollY > 300) btn.classList.add('visible');
+    else btn.classList.remove('visible');
+  });
+
+  // Close nav on outside click
+  document.addEventListener('click', e => {
+    const nav = document.getElementById('navMenu');
+    const toggle = document.querySelector('.nav-toggle');
+    if (!nav.contains(e.target) && !toggle.contains(e.target)) {
+      nav.classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>
